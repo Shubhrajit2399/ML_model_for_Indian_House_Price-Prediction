@@ -57,5 +57,5 @@ min      3.511023e+06
 max      5.232342e+06
 dtype: float64
 11. #Final machine learning model training and data prediction:
-12. Though the SVG gave the lowest mean value in RMSE but at the time of prediction it generalized all prediction values near the hyperplane which is not appropiate, so we took RandomForest Regression model to train our model and predicted the Price for random test-set data. (final_prediction_algo.py)
+12. Though the SVG gave the lowest mean value in RMSE but at the time of prediction it generalized all prediction values near the hyperplane which is not appropiate, so we took RandomForest Regression model to train our model and predicted the Price for random test-set data in input1.csv. (final_prediction_algo.py)
 13. <img width="1188" height="426" alt="Screenshot 2025-08-16 at 12 10 35 PM" src="https://github.com/user-attachments/assets/e7355177-1271-4afd-83e5-18895b331b7e" />
