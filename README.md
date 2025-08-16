@@ -12,3 +12,6 @@ Price prediction of houses from different cities of india by RandomForest Regres
 6. #Data analysis model:
 7. Next we did a data analysis of the location-wise no. of properties.(house_price_trim_data_analysis.ipynb)
 <img width="1241" height="1603" alt="download" src="https://github.com/user-attachments/assets/6fdb04e5-4697-489e-985b-810de1696f17" />
+
+8. #Proper ML Model Selection:
+9. Found out root-mean squared error by randomly testing from the stratified train-set and selected the proper algorithm to train the Machine Learning Model.(model_testing_selection)
