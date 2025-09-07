@@ -15,6 +15,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler,OneHotEncoder
 from sklearn.ensemble import RandomForestRegressor
+from flask import Flask, request, render_template, jsonify #type: ignore
 
 MODEL_FILE="model.pkl"
 PIPELINE_FILE="pipeline.pkl"
@@ -61,14 +62,34 @@ if not os.path.exists(MODEL_FILE):
     joblib.dump(pipeline,PIPELINE_FILE)
     print("Model is trained.")
 else:
+    app = Flask(__name__)
     #Lets do inference
     model=joblib.load(MODEL_FILE)
     pipeline=joblib.load(PIPELINE_FILE)
     
-    input_data=pd.read_csv("input1.csv") #test-data after removing the price column
-    transformed_input=pipeline.transform(input_data)
-    predictions=model.predict(transformed_input)
-    input_data["Price"]=predictions #price prediction for test-data
+    @app.route('/', methods=['GET','POST'])
+    def prediction():
+        if request.method == 'POST':
+            carpet_area = float(request.form['Carpet Area(sqft)'])
+            Title_BHK = request.form['Title(BHK)']
+            location = request.form['location']
+            Furnishing = request.form['Furnishing']
+            floor_no = int(request.form['Floor No.'])
+            total_floor = int(request.form['Total Floors'])
+            Transaction = request.form['Transaction']
+            facing = request.form['facing']
+            overlooking = request.form['overlooking']
+            Bathrooms = int(request.form['Bathroom'])
+            Balcony = int(request.form['Balcony'])
+            ParkingSpaces = int(request.form['Parking Spaces'])
+            ParkingType = request.form['Parking Type']
+            input_data = pd.DataFrame([[carpet_area, Title_BHK, location, Furnishing, floor_no, total_floor, Transaction, facing, overlooking, Bathrooms, Balcony, ParkingSpaces, ParkingType]],
+                                      columns=['Carpet Area(sqft)', 'Title(BHK)', 'location', 'Furnishing', 'Floor No.', 'Total Floors', 'Transaction', 'facing', 'overlooking', 'Bathroom', 'Balcony', 'Parking Spaces', 'Parking Type'])
+            transformed_input=pipeline.transform(input_data)
+            predictions=model.predict(transformed_input)
+            return(f'Estimated Price: ₹ {predictions[0]:,.2f}')
+            #return jsonify({f'Estimated Price: ₹ {predictions[0]:,.2f}'})
+        return render_template('index.html')
+    if __name__ == '__main__':
+        app.run(debug=True)
     
-    input_data.to_csv("output.csv",index=False)
-    print("Inference completed, result saved into output.csv")
